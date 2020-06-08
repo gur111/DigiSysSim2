@@ -1,0 +1,20 @@
+int num1 = ??? // (8N bits)
+int num2 = ??? // (8N bits)
+int result = 0;
+
+shift_count_b += 16
+
+for i from 0 to half N:
+    cur_a_part = 16 bits of num1 from the 16*i-th bit towards the MSB // (num1>>shift_count_a) % 0xffff
+
+    shift_count_b = 0
+
+    for k from 0 to N:
+        cur_b_part = 8 bits of num2 from the 8*k-th bit towards the MSB // (num2>>(shift_count_b)) % 0xff;
+        result += mult_8bit_16bit(cur_b_part, cur_a_part)
+        shift_count_b += 8
+
+    shift_count_a += 16
+    
+result now contains the final result
+
