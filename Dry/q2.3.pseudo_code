@@ -18,3 +18,4 @@ for i from 0 to half N:
     
 result now contains the final result
 
+// The time complexity would be N^2/2 formally: (O(N^2))
