@@ -19,17 +19,17 @@ module mult32x32_arith (
     logic shifted_mult_result;
     logic word_part, byte_part;
 
-    function logic [23:0] mult_word_by_byte(input logic [15:0] word_part, input [7:0] byte_part)
+    function logic [23:0] mult_word_by_byte(input logic [15:0] word_part, input logic [7:0] byte_part);
         return word_part * byte_part;
     endfunction
 
-    function logic [63:0] shift_mult_out_left(input logic [23:0] num, input [2:0] shift_amount)
-        return num << shift_amount*8;
+    function logic [63:0] shift_mult_out_left(input logic [23:0] num, input logic [2:0] shift_amount);
+        return num << (shift_amount * 8);
     endfunction
 
     always_ff @(posedge clk, posedge reset) begin
         if (reset == 1'b1 || clr_prod) begin
-            product <= {64{1'b0}};
+            product <= 0;
         end else if(upd_prod) begin
             product <= shifted_mult_result;
         end

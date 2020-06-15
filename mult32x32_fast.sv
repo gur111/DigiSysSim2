@@ -12,6 +12,32 @@ module mult32x32_fast (
 // Put your code here
 // ------------------
 
+	// Initiallize controller
+	mult32x32_fsm_fast controller (
+		.clk(clk),
+		.reset(reset),
+		.start(start),
+		.busy(busy),
+		.a_sel(a_sel),
+		.b_sel(b_sel),
+		.shift_sel(shift_sel),
+		.upd_prod(upd_prod),
+		.clr_prod(clr_prod)
+	);
+
+	// Initiallize the arithmetic unit
+	mult32x32_arith_fast arithmetic_unit (
+		.clk(clk),
+		.reset(reset),
+		.a(a),
+		.b(b),
+		.a_sel(a_sel),
+		.b_sel(b_sel),
+		.shift_sel(shift_sel),
+		.upd_prod(upd_prod),
+		.clr_prod(clr_prod),
+		.product(product)
+	);
 
 // End of your code
 
