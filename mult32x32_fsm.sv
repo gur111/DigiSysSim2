@@ -13,8 +13,8 @@ module mult32x32_fsm (
 
 // Put your code here
 // ------------------
-    typedef enum {IDLE, CLEAR, Q1, Q2, Q3, Q4, Q5, Q6, Q7} state;
-    state curr_state = IDLE, next_state = IDLE;
+    typedef enum {IDLE, CLEAR, Q1, Q2, Q3, Q4, Q5, Q6, Q7} State;
+    State curr_state = IDLE, next_state = IDLE;
 
     function void calculate_fsm_out;
         if (reset == 1'b1) begin
