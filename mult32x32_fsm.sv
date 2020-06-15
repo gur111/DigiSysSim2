@@ -13,7 +13,92 @@ module mult32x32_fsm (
 
 // Put your code here
 // ------------------
+    typedef enum {IDLE, CLEAR, Q1, Q2, Q3, Q4, Q5, Q6, Q7};
+    state = curr_state, next_state;
 
+    function void calculate_fsm_out;
+        if (reset == 1'b1) begin
+            upd_prod = 1'b0;
+            return;
+        end
+        
+        // Default values
+        busy = 1'b1;
+        clr_prod = 1'b0;
+        upd_prod = 1'b1;
+
+        case (curr_state)
+            IDLE: begin
+                if (start == 1'b1) begin
+                    upd_prod = 1'b0;
+                    clr_prod = 1'b1;
+                    next_state = CLEAR;
+                end else begin
+                    busy = 1'b0;
+                    upd_prod = 1'b0;
+                    next_state = IDLE;
+                end
+            end
+            CLEAR: begin
+                a_sel = 2'b00;
+                b_sel = 1'b0;
+                shift_sel = 3'b000;
+                next_state = Q1;
+            end
+            Q1:
+                a_sel = 2'b01;
+                b_sel = 1'b0;
+                shift_sel = 3'b001;
+                next_state = Q2;
+            end
+            Q2:
+                a_sel = 2'b10;
+                b_sel = 1'b0;
+                shift_sel = 3'b010;
+                next_state = Q3;
+            end
+            Q3:
+                a_sel = 2'b11;
+                b_sel = 1'b0;
+                shift_sel = 3'b011;
+                next_state = Q4;
+            end
+            Q4:
+                a_sel = 2'b00;
+                b_sel = 1'b1;
+                shift_sel = 3'b010;
+                next_state = Q5;
+            end
+            Q5:
+                a_sel = 2'b01;
+                b_sel = 1'b1;
+                shift_sel = 3'b011;
+                next_state = Q6;
+            end
+            Q6:
+                a_sel = 2'b10;
+                b_sel = 1'b1;
+                shift_sel = 3'b100;
+                next_state = Q7;
+            end
+            Q7:
+                a_sel = 2'b11;
+                b_sel = 1'b1;
+                shift_sel = 3'b101;
+                next_state = IDLE;
+            end
+        endcase
+    endfunction
+
+    always_ff @(posedge clk, posedge reset) begin
+        if (reset == 1'b1) begin
+            curr_state <= IDLE;
+        end else begin
+            curr_state <= next_state;
+        end
+    end
+
+    always_comb calculate_fsm_out;
 // End of your code
 
 endmodule
