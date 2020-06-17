@@ -28,28 +28,27 @@ main:   # Load data from memory
 #   and		<PROD>, <PROD>, t0
 
 
-	beq		x0, t3, finish
-	beq		x0, t4, finish
-
-	# Put 8 lower bits of b in t1
-	andi	t1, t4, 0xff
-	beq		x0, t1, upper
-	# Multiply 8 lower bits by a and save to t1
-	mul		t1, t1, t3
-	and		t1, t1, t0
-	# Add to the result
-	add		t6, t6, t1
-
+	# Upper byte
 upper:
-	# Put 8 upper bits of b in t1
+	# Put B's upper byte of B in t1
 	srli	t1, t4, 8
 	andi	t1, t1, 0xff
-	beq		x0, t1, finish
-	# Multiply 8 lower bits by a and save to t1
+	# Multiply B's upper bytes by A and save to t1
 	mul		t1, t1, t3
 	and		t1, t1, t0
 	# Shift back left
 	slli	t1, t1, 8
+	# Add to the result
+	add		t6, t6, t1
+
+	# Lower byte
+lower:
+	# Put lower byte of B in t1
+	andi	t1, t4, 0xff
+	# Multiply lower bytes of B by A and save to t1
+lower_mult:
+	mul		t1, t1, t3
+	and		t1, t1, t0
 	# Add to the result
 	add		t6, t6, t1
 
