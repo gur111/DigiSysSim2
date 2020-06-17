@@ -29,6 +29,7 @@ module mult32x32_fsm (
 
         unique case (curr_state)
             IDLE: begin
+                busy = 1'b0;
                 if (start == 1'b1) begin
                     upd_prod = 1'b0;
                     clr_prod = 1'b1;

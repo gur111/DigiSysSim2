@@ -12,7 +12,7 @@ module mult32x32_test;
 // Put your code here
 // ------------------
     parameter clk_interval = 5;
-    const int clk_interval = 5;
+    const int clk_cycle = clk_interval*2;
     int last = 0;
    
     initial begin
@@ -23,38 +23,46 @@ module mult32x32_test;
             #clk_interval;
             clk = ~clk;
         end
+    end
 
-        reset = 1'b0;
-        #(clk_interval*2);
+    initial begin
+        reset = 1'b1;
+        #clk_cycle;
+        #clk_cycle;
+        #clk_cycle;
+        #clk_cycle;
 
         start = 1'b0;
-
-        #clk_interval
+        reset = 1'b0;
         a = 206631848;
         b = 316086461;
 
-        #clk_interval
+        #clk_cycle;
         start = 1'b1;
         last = $time;
         @(busy);
+        start = 1'b0;
         $display("Busy changed to %0d after %0t", busy, ($time)-last);
-
         last = $time;
         @(!busy);
         $display("Busy changed to %0d after %0t", busy, ($time)-last);
         $display("Result is %0d", product);
 
+        #clk_cycle;
+        #clk_cycle;
+        #clk_cycle;
+        #clk_cycle;
     end
 
 
-     mult32x32 controller (
+     mult32x32 multiplier (
         .clk(clk),
         .reset(reset),
         .start(start),
         .a(a),
         .b(b),
         .busy(busy),
-        .product(product) 
+        .product(product)
     );
     
 // End of your code

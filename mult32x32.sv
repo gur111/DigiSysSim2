@@ -12,6 +12,12 @@ module mult32x32 (
 // Put your code here
 // ------------------
 
+	logic [1:0]a_sel;
+	logic b_sel;
+	logic [2:0]shift_sel;
+	logic upd_prod;
+	logic clr_prod;
+
 	// Initiallize controller
 	mult32x32_fsm controller (
 		.clk(clk),

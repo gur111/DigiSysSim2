@@ -28,8 +28,6 @@ module mult32x32_fast_fsm (
         busy = 1'b1;
         clr_prod = 1'b0;
         upd_prod = 1'b1;
-        a_msb_is_0 = 1'b0
-        b_msw_is_0 = 1'b0
 
         unique case (curr_state)
             IDLE: begin
@@ -56,7 +54,7 @@ module mult32x32_fast_fsm (
                 next_state = Q2;
             end
             Q2: begin
-                if(a_msb_is_0 == 1'b1 && a_msb_is_0 == 1'b1) begin // for SKIP1 in fsm
+                if(a_msb_is_0 == 1'b1 && b_msw_is_0 == 1'b1) begin // for SKIP1 in fsm
                     a_sel = 2'b10;
                     b_sel = 1'b0;
                     upd_prod = 1'b0;    //allways
@@ -69,22 +67,22 @@ module mult32x32_fast_fsm (
                 end
             end
             Q3: begin
-                if(a_msb_is_0 == 1'b0 && a_msb_is_0 == 1'b1) begin // for SKIP2 in fsm
+                if(a_msb_is_0 == 1'b0 && b_msw_is_0 == 1'b1) begin // for SKIP2 in fsm
                     a_sel = 2'b11;
                     b_sel = 1'b0;
                     upd_prod = 1'b0;    //allways
                     next_state = IDLE;  
+                end else if(a_msb_is_0 == 1'b1 && b_msw_is_0 == 1'b0) begin // for SKIP3 in fsm
+                    a_sel = 2'b00;
+                    b_sel = 1'b1;
+                    upd_prod = 1'b0;    //allways
+                    next_state = Q5;  
                 end else begin
                     a_sel = 2'b11;
                     b_sel = 1'b0;
                     shift_sel = 3'b011;
                     next_state = Q4;
-                end else if(a_msb_is_0 == 1'b1 && a_msb_is_0 == 1'b0) begin // for SKIP3 in fsm
-                    a_sel = 2'b00;
-                    b_sel = 1'b1;
-                    upd_prod = 1'b0;    //allways
-                    next_state = Q5;  
-                end
+                end 
             end
             Q4: begin
                 a_sel = 2'b00;
@@ -99,7 +97,7 @@ module mult32x32_fast_fsm (
                 next_state = Q6;
             end
             Q6: begin
-                if(a_msb_is_0 == 1'b1 && a_msb_is_0 == 1'b0) begin // for SKIP4 in fsm
+                if(a_msb_is_0 == 1'b1 && b_msw_is_0 == 1'b0) begin // for SKIP4 in fsm
                     a_sel = 2'b10;
                     b_sel = 1'b1;
                     upd_prod = 1'b0;    //allways

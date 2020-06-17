@@ -15,9 +15,10 @@ module mult32x32_arith (
 // Put your code here
 // ------------------
 
-    logic mult_result;
-    logic shifted_mult_result;
-    logic word_part, byte_part;
+    logic [23:0]mult_result;
+    logic [63:0]shifted_mult_result;
+    logic [15:0]word_part;
+    logic [7:0]byte_part;
 
     function logic [23:0] mult_word_by_byte(input logic [15:0] word_part, input logic [7:0] byte_part);
         return word_part * byte_part;
@@ -31,7 +32,7 @@ module mult32x32_arith (
         if (reset == 1'b1 || clr_prod) begin
             product <= 0;
         end else if(upd_prod) begin
-            product <= shifted_mult_result;
+            product <= product + shifted_mult_result;
         end
     end
 
