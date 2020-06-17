@@ -17,13 +17,13 @@ module mult32x32_fsm (
     State curr_state = IDLE, next_state = IDLE;
 
     function void calculate_fsm_out;
+        busy = curr_state != IDLE;
         if (reset == 1'b1) begin
             upd_prod = 1'b0;
             return;
         end
         
         // Default values
-        busy = curr_state != IDLE;
         clr_prod = 1'b0;
         upd_prod = 1'b1;
 
