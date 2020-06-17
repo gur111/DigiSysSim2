@@ -16,7 +16,40 @@ module mult32x32_fast_arith (
 
 // Put your code here
 // ------------------
+    logic [23:0]mult_result;
+    logic [63:0]shifted_mult_result;
+    logic [15:0]word_part;
+    logic [7:0]byte_part;
 
+    function logic [23:0] mult_word_by_byte(input logic [15:0] word_part, input logic [7:0] byte_part);
+        return word_part * byte_part;
+    endfunction
+
+    function logic [63:0] shift_mult_out_left(input logic [23:0] num, input logic [2:0] shift_amount);
+        return num << (shift_amount * 8);
+    endfunction
+
+    always_ff @(posedge clk, posedge reset) begin
+        if (reset == 1'b1 || clr_prod) begin
+            product <= 0;
+        end else if(upd_prod) begin
+            product <= product + shifted_mult_result;
+        end
+    end
+
+    always_comb begin
+        // Get the parts of A and B that we currently want to calculate
+        byte_part = a[8*a_sel+:8];
+        word_part = b[16*b_sel+:16];
+        // Multiply the parts
+        mult_result = mult_word_by_byte(word_part, byte_part);
+        // Shift the result
+        shifted_mult_result = shift_mult_out_left(mult_result, shift_sel);
+
+        // Check MSB/MSW zero
+        a_msb_is_0 = a[31:24] == {8{1'b0}};
+        b_msw_is_0 = b[31:16] == {16{1'b0}};
+    end
 
 // End of your code
 

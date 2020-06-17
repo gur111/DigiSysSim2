@@ -25,7 +25,7 @@ module mult32x32_fast_fsm (
         end
         
         // Default values
-        busy = 1'b1;
+        busy = curr_state != IDLE;
         clr_prod = 1'b0;
         upd_prod = 1'b1;
 
@@ -36,7 +36,6 @@ module mult32x32_fast_fsm (
                     clr_prod = 1'b1;
                     next_state = CLEAR;
                 end else begin
-                    busy = 1'b0;
                     upd_prod = 1'b0;
                     next_state = IDLE;
                 end

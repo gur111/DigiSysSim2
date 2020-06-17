@@ -50,8 +50,6 @@ module mult32x32_test;
 
         #clk_cycle;
         #clk_cycle;
-        #clk_cycle;
-        #clk_cycle;
     end
 
 

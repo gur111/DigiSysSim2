@@ -23,19 +23,17 @@ module mult32x32_fsm (
         end
         
         // Default values
-        busy = 1'b1;
+        busy = curr_state != IDLE;
         clr_prod = 1'b0;
         upd_prod = 1'b1;
 
         unique case (curr_state)
             IDLE: begin
-                busy = 1'b0;
                 if (start == 1'b1) begin
                     upd_prod = 1'b0;
                     clr_prod = 1'b1;
                     next_state = CLEAR;
                 end else begin
-                    busy = 1'b0;
                     upd_prod = 1'b0;
                     next_state = IDLE;
                 end
